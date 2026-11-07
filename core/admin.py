@@ -32,9 +32,9 @@ class HeroSlideAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ["name", "category", "price", "is_new", "is_featured", "is_active", "order"]
-    list_editable = ["price", "is_new", "is_featured", "is_active", "order"]
-    list_filter = ["category", "is_new", "is_featured", "is_active"]
+    list_display = ["name", "category", "price", "price_on_request", "is_new", "is_featured", "is_active", "order"]
+    list_editable = ["price", "price_on_request", "is_new", "is_featured", "is_active", "order"]
+    list_filter = ["category", "price_on_request", "is_new", "is_featured", "is_active"]
     search_fields = ["name"]
     prepopulated_fields = {"slug": ("name",)}
 

@@ -46,6 +46,18 @@ def shop(request, slug=None):
     })
 
 
+def new_in(request):
+    products = Product.objects.filter(is_active=True, is_new=True).select_related("category")
+    sort = request.GET.get("sort", "")
+    if sort == "price-asc":
+        products = products.order_by("price_on_request", "price")
+    elif sort == "price-desc":
+        products = products.order_by("price_on_request", "-price")
+    elif sort == "name":
+        products = products.order_by("name")
+    return render(request, "core/new_in.html", {"products": products, "sort": sort})
+
+
 def product_detail(request, slug):
     product = get_object_or_404(Product.objects.select_related("category"), slug=slug, is_active=True)
     more = Product.objects.filter(is_active=True, category=product.category).exclude(pk=product.pk)[:4]
@@ -79,6 +91,9 @@ def cart_detail(request):
 @require_POST
 def cart_add(request, pk):
     product = get_object_or_404(Product, pk=pk, is_active=True)
+    if product.price_on_request:
+        messages.info(request, f"{product.name} is priced on request — please talk to us on WhatsApp.")
+        return redirect("product", slug=product.slug)
     cart = _cart(request)
     cart[str(pk)] = min(cart.get(str(pk), 0) + 1, 20)
     request.session.modified = True

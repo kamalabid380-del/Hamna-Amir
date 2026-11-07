@@ -107,7 +107,7 @@
   <section class="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
     <div class="flex items-end justify-between mb-8">
       <h2 class="text-lg sm:text-xl tracking-[0.15em] uppercase">New In</h2>
-      <a href="{% url 'shop' %}?new=1" class="text-[10px] tracking-[0.2em] uppercase underline">View All</a>
+      <a href="{% url 'new_in' %}" class="text-[10px] tracking-[0.2em] uppercase underline">View All</a>
     </div>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
       {% for p in new_products %}

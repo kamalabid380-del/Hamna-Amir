@@ -6,6 +6,7 @@ staticfiles/
 venv/
 .DS_Store
 server.log
+*.lnk
 
 db.sqlite3-wal
 db.sqlite3-shm

@@ -46,7 +46,7 @@
     </div>
     <nav class="hidden md:block border-t border-gray-100">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 flex justify-center gap-7 py-3 text-[10px] tracking-[0.2em] uppercase">
-        <a href="{% url 'shop' %}?new=1" class="hover:text-gray-500">New In</a>
+        <a href="{% url 'new_in' %}" class="hover:text-gray-500">New In</a>
         {% for c in nav_categories %}
         <a href="{% url 'category' c.slug %}" class="hover:text-gray-500">{{ c.name }}</a>
         {% endfor %}
@@ -58,7 +58,7 @@
         <input type="search" name="q" placeholder="Search jewelry" class="flex-1 text-sm focus:outline-none bg-transparent">
         <button type="submit">→</button>
       </form>
-      <a href="{% url 'shop' %}?new=1" class="block">New In</a>
+      <a href="{% url 'new_in' %}" class="block">New In</a>
       {% for c in nav_categories %}
       <a href="{% url 'category' c.slug %}" class="block">{{ c.name }}</a>
       {% endfor %}

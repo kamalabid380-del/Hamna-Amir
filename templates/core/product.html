@@ -13,9 +13,18 @@
   <div>
     <p class="text-[10px] tracking-[0.25em] uppercase text-gray-400">{{ product.category.name }}</p>
     <h1 class="mt-2 text-2xl sm:text-3xl font-light">{{ product.name }}</h1>
+    {% if product.price_on_request %}
+    <p class="mt-4 text-sm tracking-[0.2em] uppercase text-gray-700">Talk to us</p>
+    {% else %}
     <p class="mt-4 text-lg text-gray-700">Rs. {{ product.price|floatformat:"0" }}</p>
+    {% endif %}
     <p class="mt-6 text-sm text-gray-600 leading-relaxed">{{ product.description }}</p>
 
+    {% if product.price_on_request %}
+    {% if site.whatsapp_link %}
+    <a href="{{ site.whatsapp_link }}?text=Hello%20Hamna%20Amir,%20I%27m%20interested%20in%20{{ product.name|urlencode }}%20({{ request.build_absolute_uri }})" target="_blank" rel="noopener" class="mt-8 inline-block bg-gray-900 text-white px-10 py-4 text-[11px] tracking-[0.25em] uppercase hover:bg-gray-700">Talk to us on WhatsApp</a>
+    {% endif %}
+    {% else %}
     <form action="{% url 'cart_add' product.pk %}" method="post" class="mt-8">
       {% csrf_token %}
       <input type="hidden" name="next" value="{{ request.path }}">
@@ -24,6 +33,7 @@
 
     {% if site.whatsapp_link %}
     <a href="{{ site.whatsapp_link }}" target="_blank" rel="noopener" class="mt-4 inline-block text-xs underline">Enquire on WhatsApp</a>
+    {% endif %}
     {% endif %}
 
     <div class="mt-10 border-t border-gray-200 pt-6 text-xs text-gray-500 space-y-2">

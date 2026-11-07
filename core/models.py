@@ -101,6 +101,10 @@ class Product(models.Model):
     slug = models.SlugField(max_length=180, unique=True, blank=True)
     description = models.TextField(blank=True, default="Handcrafted designer jewelry, finished in the Hamna Amir studio.")
     price = models.DecimalField(max_digits=10, decimal_places=0, help_text="Price in PKR.")
+    price_on_request = models.BooleanField(
+        default=False,
+        help_text="Show 'Talk to us' instead of a price. The piece cannot be added to the bag.",
+    )
     image = models.ImageField(upload_to="products/", blank=True)
     is_new = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=False)
