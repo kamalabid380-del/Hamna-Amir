@@ -1,0 +1,44 @@
+{% extends "core/base.html" %}
+
+{% block title %}Contact — {{ site.brand_name }}{% endblock %}
+
+{% block content %}
+<section class="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16 grid md:grid-cols-2 gap-12">
+  <div>
+    <h1 class="text-2xl sm:text-3xl font-light tracking-[0.15em] uppercase mb-8">Contact Us</h1>
+    <form method="post" class="space-y-4">
+      {% csrf_token %}
+      {% for field in form %}
+      <div>
+        <label for="{{ field.id_for_label }}" class="block text-[10px] tracking-[0.2em] uppercase text-gray-500 mb-1">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}<p class="text-red-600 text-xs mt-1">{{ field.errors.0 }}</p>{% endif %}
+      </div>
+      {% endfor %}
+      <button type="submit" class="bg-gray-900 text-white px-10 py-4 text-[11px] tracking-[0.25em] uppercase hover:bg-gray-700">Send Message</button>
+    </form>
+  </div>
+  <aside class="text-sm text-gray-600 space-y-6 md:pt-16">
+    <div>
+      <h2 class="text-[10px] tracking-[0.25em] uppercase text-gray-400 mb-2">Call / WhatsApp</h2>
+      <a href="tel:{{ site.phone }}" class="block hover:underline">{{ site.phone }}</a>
+      {% if site.phone_secondary %}<a href="tel:{{ site.phone_secondary }}" class="block hover:underline">{{ site.phone_secondary }}</a>{% endif %}
+    </div>
+    <div>
+      <h2 class="text-[10px] tracking-[0.25em] uppercase text-gray-400 mb-2">Email</h2>
+      <a href="mailto:{{ site.email }}" class="hover:underline break-all">{{ site.email }}</a>
+    </div>
+    <div>
+      <h2 class="text-[10px] tracking-[0.25em] uppercase text-gray-400 mb-2">Studio</h2>
+      <p>{{ site.address }}</p>
+      {% if site.studio_map_url %}
+      <a href="{{ site.studio_map_url }}" target="_blank" rel="noopener" class="text-xs underline">Get directions</a>
+      {% endif %}
+    </div>
+    <div>
+      <h2 class="text-[10px] tracking-[0.25em] uppercase text-gray-400 mb-2">Policies</h2>
+      <p class="text-xs leading-relaxed">No return &amp; no exchange. Every piece is checked before dispatch. Terms apply to all orders.</p>
+    </div>
+  </aside>
+</section>
+{% endblock %}

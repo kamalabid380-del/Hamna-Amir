@@ -1,0 +1,37 @@
+{% extends "core/base.html" %}
+
+{% block title %}Checkout — {{ site.brand_name }}{% endblock %}
+
+{% block content %}
+<section class="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16 grid md:grid-cols-2 gap-12">
+  <div>
+    <h1 class="text-2xl font-light tracking-[0.15em] uppercase mb-8">Checkout</h1>
+    <form method="post" class="space-y-4">
+      {% csrf_token %}
+      {% for field in form %}
+      <div>
+        <label for="{{ field.id_for_label }}" class="block text-[10px] tracking-[0.2em] uppercase text-gray-500 mb-1">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}<p class="text-red-600 text-xs mt-1">{{ field.errors.0 }}</p>{% endif %}
+      </div>
+      {% endfor %}
+      <p class="text-xs text-gray-500 pt-2">Payment: Cash on Delivery. Our team confirms every order on WhatsApp before dispatch.</p>
+      <button type="submit" class="w-full bg-gray-900 text-white py-4 text-[11px] tracking-[0.25em] uppercase hover:bg-gray-700">Place Order</button>
+    </form>
+  </div>
+  <aside class="bg-gray-50 p-6 h-fit">
+    <h2 class="text-sm tracking-[0.2em] uppercase mb-5">Order Summary</h2>
+    <div class="divide-y divide-gray-200 text-sm">
+      {% for line in lines %}
+      <div class="py-3 flex justify-between gap-4">
+        <span>{{ line.product.name }} × {{ line.quantity }}</span>
+        <span class="whitespace-nowrap">Rs. {{ line.product.price|floatformat:"0" }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="mt-4 pt-4 border-t border-gray-300 flex justify-between text-base">
+      <span>Total</span><span>Rs. {{ total|floatformat:"0" }}</span>
+    </div>
+  </aside>
+</section>
+{% endblock %}

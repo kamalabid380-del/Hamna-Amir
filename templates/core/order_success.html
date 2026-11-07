@@ -1,0 +1,17 @@
+{% extends "core/base.html" %}
+
+{% block title %}Order #{{ order.pk }} — {{ site.brand_name }}{% endblock %}
+
+{% block content %}
+<section class="max-w-2xl mx-auto px-4 sm:px-6 py-20 text-center">
+  <h1 class="text-2xl sm:text-3xl font-light tracking-[0.15em] uppercase">Thank You, {{ order.name }}</h1>
+  <p class="mt-4 text-sm text-gray-600">Your order <strong>#{{ order.pk }}</strong> has been placed — total Rs. {{ order.total|floatformat:"0" }}.</p>
+  <p class="mt-2 text-sm text-gray-600">We will confirm it on WhatsApp at {{ order.phone }} before dispatch. Payment is cash on delivery.</p>
+  {% if wa_link %}
+  <a href="{{ wa_link }}" target="_blank" rel="noopener" class="mt-8 inline-block bg-gray-900 text-white px-8 py-4 text-[11px] tracking-[0.25em] uppercase hover:bg-green-700">Confirm on WhatsApp</a>
+  {% endif %}
+  <div class="mt-10">
+    <a href="{% url 'shop' %}" class="text-xs underline">Continue shopping</a>
+  </div>
+</section>
+{% endblock %}

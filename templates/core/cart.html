@@ -1,0 +1,49 @@
+{% extends "core/base.html" %}
+
+{% block title %}Shopping Bag — {{ site.brand_name }}{% endblock %}
+
+{% block content %}
+<section class="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+  <h1 class="text-2xl sm:text-3xl font-light tracking-[0.15em] uppercase text-center mb-10">Shopping Bag</h1>
+
+  {% if lines %}
+  <div class="divide-y divide-gray-200 border-y border-gray-200">
+    {% for line in lines %}
+    <div class="py-5 flex items-center gap-4">
+      <a href="{% url 'product' line.product.slug %}" class="block w-20 h-24 bg-gray-50 flex-shrink-0">
+        {% if line.product.image %}
+        <img src="{{ line.product.image.url }}" alt="{{ line.product.name }}" class="w-full h-full object-cover">
+        {% endif %}
+      </a>
+      <div class="flex-1 min-w-0">
+        <a href="{% url 'product' line.product.slug %}" class="text-sm hover:underline">{{ line.product.name }}</a>
+        <p class="text-xs text-gray-500 mt-1">Rs. {{ line.product.price|floatformat:"0" }}</p>
+        <form action="{% url 'cart_update' line.product.pk %}" method="post" class="mt-2 flex items-center gap-2">
+          {% csrf_token %}
+          <input type="number" name="quantity" value="{{ line.quantity }}" min="0" max="20" class="w-16 border border-gray-300 px-2 py-1 text-xs">
+          <button type="submit" class="text-[10px] tracking-[0.15em] uppercase underline">Update</button>
+        </form>
+      </div>
+      <form action="{% url 'cart_remove' line.product.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit" aria-label="Remove" class="text-gray-400 hover:text-gray-900 text-lg">×</button>
+      </form>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+    <p class="text-base">Total <span class="ml-3 text-lg">Rs. {{ total|floatformat:"0" }}</span></p>
+    <div class="flex gap-4">
+      <a href="{% url 'shop' %}" class="border border-gray-300 px-6 py-3 text-[10px] tracking-[0.2em] uppercase">Continue Shopping</a>
+      <a href="{% url 'checkout' %}" class="bg-gray-900 text-white px-8 py-3 text-[10px] tracking-[0.2em] uppercase hover:bg-gray-700">Checkout</a>
+    </div>
+  </div>
+  {% else %}
+  <div class="text-center py-16">
+    <p class="text-sm text-gray-400">Your bag is empty.</p>
+    <a href="{% url 'shop' %}" class="mt-6 inline-block border border-gray-900 px-8 py-3 text-[10px] tracking-[0.25em] uppercase hover:bg-gray-900 hover:text-white">Explore the Collection</a>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

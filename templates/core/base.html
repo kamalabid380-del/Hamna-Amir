@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ site.brand_name }} — {{ site.tagline }}{% endblock %}</title>
+  <meta name="description" content="{% block description %}Handcrafted designer jewelry by {{ site.brand_name }}, Lahore. Earrings, rings, bangles and bridal sets.{% endblock %}">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Pinyon+Script&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+</head>
+<body class="bg-white text-gray-900 font-sans antialiased">
+
+  <div class="bg-gray-900 text-white text-center text-[10px] tracking-[0.15em] uppercase px-4 py-2">
+    {{ site.announcement }}
+  </div>
+
+  <header class="border-b border-gray-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+      <button id="menu-btn" class="md:hidden p-2" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a href="{% url 'home' %}" class="text-center flex-1 md:flex-none">
+        <span class="block text-xl sm:text-2xl font-light tracking-[0.25em] uppercase">{{ site.brand_name }}</span>
+        <span class="block text-[9px] tracking-[0.5em] uppercase text-gray-500 mt-1">{{ site.tagline }}</span>
+      </a>
+      <div class="flex items-center gap-4">
+        <form action="{% url 'shop' %}" method="get" class="hidden sm:flex items-center border-b border-gray-300">
+          <input type="search" name="q" placeholder="Search" class="text-xs py-1 px-1 w-28 focus:outline-none bg-transparent">
+          <button type="submit" aria-label="Search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-4 h-4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          </button>
+        </form>
+        <a href="/admin/" aria-label="Account" class="hidden sm:block">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6.5 8-6.5s8 2.5 8 6.5"/></svg>
+        </a>
+        <a href="{% url 'cart' %}" aria-label="Shopping bag" class="relative">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+          {% if cart_count %}
+          <span class="absolute -top-2 -right-2 bg-gray-900 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">{{ cart_count }}</span>
+          {% endif %}
+        </a>
+      </div>
+    </div>
+    <nav class="hidden md:block border-t border-gray-100">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 flex justify-center gap-7 py-3 text-[10px] tracking-[0.2em] uppercase">
+        <a href="{% url 'shop' %}?new=1" class="hover:text-gray-500">New In</a>
+        {% for c in nav_categories %}
+        <a href="{% url 'category' c.slug %}" class="hover:text-gray-500">{{ c.name }}</a>
+        {% endfor %}
+        <a href="{% url 'contact' %}" class="hover:text-gray-500">Contact</a>
+      </div>
+    </nav>
+    <nav id="mobile-menu" class="hidden md:hidden border-t border-gray-100 px-6 py-4 space-y-3 text-xs tracking-[0.2em] uppercase">
+      <form action="{% url 'shop' %}" method="get" class="flex items-center border-b border-gray-300 pb-2">
+        <input type="search" name="q" placeholder="Search jewelry" class="flex-1 text-sm focus:outline-none bg-transparent">
+        <button type="submit">→</button>
+      </form>
+      <a href="{% url 'shop' %}?new=1" class="block">New In</a>
+      {% for c in nav_categories %}
+      <a href="{% url 'category' c.slug %}" class="block">{{ c.name }}</a>
+      {% endfor %}
+      <a href="{% url 'contact' %}" class="block">Contact</a>
+    </nav>
+  </header>
+
+  {% if messages %}
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 mt-4">
+    {% for message in messages %}
+    <p class="border border-gray-300 bg-gray-50 text-xs tracking-wide px-4 py-3">{{ message }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="border-t border-gray-200 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-10 text-sm">
+      <div>
+        <h3 class="text-base font-normal mb-4">Follow Us</h3>
+        {% if site.facebook_url %}<a href="{{ site.facebook_url }}" target="_blank" rel="noopener" class="block text-xs text-gray-600 mb-2 hover:underline">Facebook</a>{% endif %}
+        {% if site.instagram_url %}<a href="{{ site.instagram_url }}" target="_blank" rel="noopener" class="block text-xs text-gray-600 mb-2 hover:underline">Instagram</a>{% endif %}
+      </div>
+      <div>
+        <h3 class="text-base font-normal mb-4">Customer Service</h3>
+        <a href="{% url 'contact' %}" class="block text-xs text-gray-600 mb-2 hover:underline">No Return &amp; No Exchange</a>
+        <a href="{% url 'contact' %}" class="block text-xs text-gray-600 mb-2 hover:underline">Terms &amp; Conditions</a>
+      </div>
+      <div>
+        <h3 class="text-base font-normal mb-4">Contact Us</h3>
+        <a href="tel:{{ site.phone }}" class="block text-xs text-gray-600 mb-2">{{ site.phone }}</a>
+        {% if site.phone_secondary %}<a href="tel:{{ site.phone_secondary }}" class="block text-xs text-gray-600 mb-2">{{ site.phone_secondary }}</a>{% endif %}
+        <a href="mailto:{{ site.email }}" class="block text-xs text-gray-600 mb-2 break-all">{{ site.email }}</a>
+      </div>
+      <div>
+        <h3 class="text-base font-normal mb-4">Newsletter</h3>
+        <p class="text-xs text-gray-500 mb-3">Receive our newsletter and discover our stories, collections and surprises.</p>
+        <form action="{% url 'newsletter' %}" method="post" class="flex">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.path }}">
+          <input type="email" name="email" required placeholder="Email" class="flex-1 min-w-0 border border-gray-300 px-3 py-2 text-xs focus:outline-none focus:border-gray-900">
+          <button type="submit" class="bg-gray-900 text-white text-[10px] tracking-[0.15em] px-4 uppercase">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    <p class="text-center text-[10px] tracking-[0.2em] text-gray-400 uppercase pb-8">{{ site.footer_note }}</p>
+  </footer>
+
+  {% if site.whatsapp_link %}
+  <a href="{{ site.whatsapp_link }}" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"
+    class="fixed bottom-5 right-5 z-40 w-12 h-12 rounded-full bg-gray-900 text-white flex items-center justify-center shadow-lg hover:bg-green-600 transition-colors">
+    <svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.4 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.5-.4.4c-.1.1-.3.3-.1.6.1.3.7 1.2 1.6 1.9 1.1 1 2 1.3 2.3 1.4.3.1.5.1.7-.1l.9-1.1c.2-.3.4-.2.7-.1l2 .9c.3.2.5.2.6.4.1.1.1.6-.1 1.2Z"/></svg>
+  </a>
+  {% endif %}
+
+  <script>
+    document.getElementById('menu-btn').addEventListener('click', function () {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

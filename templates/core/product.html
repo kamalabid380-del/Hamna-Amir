@@ -1,0 +1,47 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ product.name }} — {{ site.brand_name }}{% endblock %}
+{% block description %}{{ product.description|truncatewords:25 }}{% endblock %}
+
+{% block content %}
+<section class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 grid md:grid-cols-2 gap-10">
+  <div class="zoom-box bg-gray-50 aspect-[3/4]">
+    {% if product.image %}
+    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover">
+    {% endif %}
+  </div>
+  <div>
+    <p class="text-[10px] tracking-[0.25em] uppercase text-gray-400">{{ product.category.name }}</p>
+    <h1 class="mt-2 text-2xl sm:text-3xl font-light">{{ product.name }}</h1>
+    <p class="mt-4 text-lg text-gray-700">Rs. {{ product.price|floatformat:"0" }}</p>
+    <p class="mt-6 text-sm text-gray-600 leading-relaxed">{{ product.description }}</p>
+
+    <form action="{% url 'cart_add' product.pk %}" method="post" class="mt-8">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.path }}">
+      <button type="submit" class="w-full sm:w-auto bg-gray-900 text-white px-10 py-4 text-[11px] tracking-[0.25em] uppercase hover:bg-gray-700">Add to Bag</button>
+    </form>
+
+    {% if site.whatsapp_link %}
+    <a href="{{ site.whatsapp_link }}" target="_blank" rel="noopener" class="mt-4 inline-block text-xs underline">Enquire on WhatsApp</a>
+    {% endif %}
+
+    <div class="mt-10 border-t border-gray-200 pt-6 text-xs text-gray-500 space-y-2">
+      <p>Handcrafted in our Lahore studio.</p>
+      <p>No return &amp; no exchange — please choose carefully.</p>
+      <p>Cash on delivery available across Pakistan.</p>
+    </div>
+  </div>
+</section>
+
+{% if more %}
+<section class="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
+  <h2 class="text-lg tracking-[0.15em] uppercase mb-8">You May Also Like</h2>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+    {% for p in more %}
+    {% include "core/_product_card.html" %}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}
