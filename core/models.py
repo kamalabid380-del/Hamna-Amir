@@ -80,7 +80,7 @@ class HeroSlide(models.Model):
     title = models.CharField(max_length=120, default="Soaree")
     subtitle = models.CharField(max_length=160, default="Signature Jewels — Edit II")
     cta_label = models.CharField(max_length=60, default="Explore")
-    cta_url = models.CharField(max_length=200, default="/shop/")
+    cta_url = models.CharField(max_length=200, default="/collections/all/")
     show_text = models.BooleanField(
         default=False,
         help_text="On for plain photos. Off for campaign banners that already contain their own text.",
