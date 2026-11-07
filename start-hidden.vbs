@@ -6,12 +6,12 @@ Set sh = CreateObject("WScript.Shell")
 Set fso = CreateObject("Scripting.FileSystemObject")
 root = fso.GetParentFolderName(WScript.ScriptFullName)
 sh.CurrentDirectory = root
-base = "http://127.0.0.1:8002/"
+base = "http://127.0.0.4/"
 py = "C:\Users\ABID\AppData\Local\Programs\Python\Python313\python.exe"
 If Not fso.FileExists(py) Then py = "python"
 
 If Not IsUp() Then
-  sh.Run "cmd /c """ & py & """ manage.py runserver 0.0.0.0:8002 >> server.log 2>&1", 0, False
+  sh.Run "cmd /c """ & py & """ manage.py runserver 127.0.0.4:80 >> server.log 2>&1", 0, False
   For i = 1 To 40
     WScript.Sleep 500
     If IsUp() Then Exit For
@@ -26,7 +26,9 @@ Function IsUp()
   http.Open "GET", base, False
   http.Send
   If Err.Number = 0 Then
-    If http.Status >= 200 And http.Status < 500 Then IsUp = True
+    If http.Status = 200 Then
+      If InStr(http.ResponseText, "Hamna Amir") > 0 Then IsUp = True
+    End If
   End If
   Err.Clear
   On Error GoTo 0
